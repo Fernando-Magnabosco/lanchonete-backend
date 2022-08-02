@@ -2,33 +2,38 @@ const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../db");
 
 const modelSchema = db.define(
-    "Comanda",
+    "User",
     {
-        id_comanda: {
-            type: DataTypes.INTEGER,
+        _id: {
+            type: DataTypes.BIGINT,
             primaryKey: true,
             autoIncrement: true,
         },
-        id_garcom: {
-            type: DataTypes.INTEGER,
+
+        isAdmin: {
+            type: DataTypes.BOOLEAN,
             allowNull: false,
-            references: {
-                model: "garcom",
-                key: "idgarcom",
-            },
+            defaultValue: false,
         },
-        data: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        situacao: {
-            type: DataTypes.INTEGER,
+
+        name: {
+            type: DataTypes.STRING,
             allowNull: false,
         },
-        desconto: {
-            type: DataTypes.FLOAT,
+
+        email: {
+            type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: 0,
+        },
+
+        passwordHash: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+
+        token: {
+            type: DataTypes.STRING,
+            allowNull: false,
         },
     },
     {

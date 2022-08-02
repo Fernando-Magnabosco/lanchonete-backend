@@ -2,33 +2,36 @@ const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../db");
 
 const modelSchema = db.define(
-    "Comanda",
+    "Produto",
     {
-        id_comanda: {
+        id_produto: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        id_garcom: {
+        nm_produto: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        id_categoria: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "garcom",
-                key: "idgarcom",
+                model: "Categoria",
+                key: "id_categoria",
             },
         },
-        data: {
-            type: DataTypes.DATE,
+        descricaoproduto: {
+            type: DataTypes.STRING,
             allowNull: false,
         },
-        situacao: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        desconto: {
+        valor: {
             type: DataTypes.FLOAT,
             allowNull: false,
-            defaultValue: 0,
+        },
+        flsituacao: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
     },
     {

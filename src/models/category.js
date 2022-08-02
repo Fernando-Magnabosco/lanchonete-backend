@@ -2,9 +2,9 @@ const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../db");
 
 const modelSchema = db.define(
-    "categoria",
+    "Categoria",
     {
-        id: {
+        id_categoria: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,

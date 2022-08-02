@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../db");
 
 const modelSchema = db.define(
-    "ingrediente",
+    "Ingrediente",
     {
         id_ingrediente: {
             type: DataTypes.INTEGER,
