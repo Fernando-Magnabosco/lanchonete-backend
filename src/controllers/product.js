@@ -51,9 +51,41 @@ module.exports = {
         });
     },
 
+    removeProduct: async (req, res) => {
+        let { id } = req.body;
+
+        if (!id.match(idRegex)) {
+            return res.status(400).json({
+                error: "Produto inválido",
+            });
+        }
+
+        const product = await Product.findByPk(id);
+
+        if (!product) {
+            return res.status(400).json({
+                error: "Produto não existe",
+            });
+        }
+
+        if (product.flsituacao === 0) {
+            return res.status(400).json({
+                error: "Produto já excluído",
+            });
+        }
+
+        await product.update({
+            flsituacao: 0,
+        });
+
+        res.json({
+            product,
+        });
+    },
+
     getList: async (req, res) => {
         let total = 0;
-        let { sort = "asc", offset = 0, limit = 8, q, cat, state } = req.query;
+        let { sort = "asc", offset = 0, limit = 8, q, cat } = req.query;
 
         let filters = { flsituacao: 1 };
 
