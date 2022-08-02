@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
-const db = require('../db');
+const db = require("../db");
 
 const modelSchema = db.define("produto", {
     id_produto: {
@@ -15,16 +15,18 @@ const modelSchema = db.define("produto", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'categoria',
-            key: 'id_categoria'
-        }
+            model: "categoria",
+            key: "id_categoria",
+        },
     },
     valor: {
-        type: DataTypes.FLOAT,  
+        type: DataTypes.FLOAT,
         allowNull: false,
     },
     flsituacao: {
-        type: DataTypes.INTEGER,  
+        type: DataTypes.INTEGER,
         allowNull: false,
-    }
+    },
 });
+
+module.exports = modelSchema;

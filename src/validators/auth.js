@@ -34,9 +34,5 @@ module.exports = {
             },
             errorMessage: "A senha deve conter pelo menos 8 caracteres",
         },
-        state: {
-            notEmpty: true,
-            errorMessage: "State is required",
-        },
     }),
 };

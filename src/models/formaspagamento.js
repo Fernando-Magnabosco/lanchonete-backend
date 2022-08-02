@@ -19,3 +19,5 @@ const modelSchema = db.define(
         freezeTableName: true,
     }
 );
+
+module.exports = modelSchema;

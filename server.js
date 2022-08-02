@@ -24,5 +24,7 @@ db.sync()
     .catch((err) => console.log(err));
 
 server.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.BASE} ${process.env.PORT}`);
+    console.log(
+        `Server is running on port ${process.env.BASE} ${process.env.PORT}`
+    );
 });
