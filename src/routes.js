@@ -30,6 +30,7 @@ router.post(
 // READ
 router.get("/product/list", ProductController.getList);
 router.get("/product/:id", ProductController.getProduct);
+router.get("/product/:id/ingredients", ProductController.getIngredients);
 
 // UPDATE / DELETE
 router.put(
@@ -37,6 +38,12 @@ router.put(
     Auth.private,
     ProductValidator.updateProduct,
     ProductController.updateProduct
+);
+
+router.put(
+    "/product/:id/ingredients",
+    Auth.private,
+    ProductController.updateIngredients
 );
 
 router.post("/product/toggle", Auth.private, ProductController.toggleProduct);
