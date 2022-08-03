@@ -4,6 +4,7 @@ const router = express.Router();
 const Auth = require("./middlewares/auth.js");
 
 const AuthValidator = require("./validators/auth.js");
+const ProductValidator = require("./validators/product.js");
 
 const AuthController = require("./controllers/auth.js");
 const ProductController = require("./controllers/product.js");
@@ -13,24 +14,46 @@ router.get("/ping", (req, res) => {
     res.json({ pong: true });
 });
 
+// AUTH
 router.post("/user/signin", AuthValidator.signin, AuthController.signin);
 router.post("/user/signup", AuthValidator.signup, AuthController.signup);
 
-router.get("/product/list", ProductController.getList);
-router.post("/product/add", Auth.private, ProductController.addProduct);
-router.post("/product/remove", Auth.private, ProductController.removeProduct);
-
-router.get("/category/list", CategoryController.getList);
-router.post("/category/add", Auth.private, CategoryController.addCategory);
+// PRODUCT:
+// CREATE
 router.post(
-    "/category/disable",
+    "/product/add",
     Auth.private,
-    CategoryController.disableCategory
+    ProductValidator.addProduct,
+    ProductController.addProduct
 );
-router.post(
-    "/category/enable",
+
+// READ
+router.get("/product/list", ProductController.getList);
+router.get("/product/:id", ProductController.getProduct);
+
+// UPDATE / DELETE
+router.put(
+    "/product/:id",
     Auth.private,
-    CategoryController.enableCategory
+    ProductValidator.updateProduct,
+    ProductController.updateProduct
+);
+
+router.post("/product/toggle", Auth.private, ProductController.toggleProduct);
+
+// CATEGORY:
+// CREATE
+router.post("/category/add", Auth.private, CategoryController.addCategory);
+
+// READ
+router.get("/category/list", CategoryController.getList);
+router.get("/category/:id", CategoryController.getItems);
+
+// UPDATE / DELETE
+router.post(
+    "/category/toggle",
+    Auth.private,
+    CategoryController.toggleCategory
 );
 
 module.exports = router;

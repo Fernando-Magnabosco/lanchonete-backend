@@ -6,6 +6,8 @@ const Product = require("../models/product.js");
 const idRegex = /[0-9]+/;
 
 module.exports = {
+    // CREATE
+
     addCategory: async (req, res) => {
         let { name } = req.body;
 
@@ -24,50 +26,29 @@ module.exports = {
         });
     },
 
-    disableCategory: async (req, res) => {
-        let { id } = req.body;
+    // READ
 
-        if (!id.match(idRegex)) {
+    getItems: async (req, res) => {
+        let { id } = req.params;
+
+        if (!id) {
             return res.status(400).json({
-                error: "Categoria inválida",
+                error: "Categoria Inválida",
             });
         }
 
-        const category = await Category.findByPk(id);
-
-        if (!category) {
-            return res.status(400).json({
-                error: "Categoria não existe",
-            });
-        }
-
-        if (category.flsituacao === false) {
-            return res.status(400).json({
-                error: "Categoria já excluída",
-            });
-        }
-
-        await category.update({
-            flsituacao: false,
+        let products = await Product.findAll({
+            where: { id_categoria: id },
         });
 
-        const products = await Product.findAll({
-            where: {
-                id_categoria: id,
-            },
-        });
-
-        for (let product of products) {
-            await product.update({
-                flsituacao: 0,
-            });
+        if (!products) {
+            return res.json({});
         }
 
-        res.json({
-            category,
+        return res.json({
+            products,
         });
     },
-
 
     getList: async (req, res) => {
         let total = 0;
@@ -84,6 +65,40 @@ module.exports = {
         res.json({
             total,
             categories,
+        });
+    },
+
+    // UPDATE/DELETE
+
+    toggleCategory: async (req, res) => {
+        let { id } = req.body;
+
+        if (!id) {
+            return res.status(400).json({
+                error: "Categoria Inválida",
+            });
+        }
+
+        if (!id.match(idRegex)) {
+            return res.status(400).json({
+                error: "Categoria inválida",
+            });
+        }
+
+        const category = await Category.findByPk(id);
+
+        if (!category) {
+            return res.status(400).json({
+                error: "Categoria não existe",
+            });
+        }
+
+        await category.update({
+            flsituacao: !category.flsituacao,
+        });
+
+        res.json({
+            category,
         });
     },
 };
