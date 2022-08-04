@@ -131,10 +131,8 @@ module.exports = {
             where: { product: product.id_produto },
         });
 
-        res.json({
-            product,
-            images,
-        });
+        product.dataValues.images = images;
+        return res.json(product);
     },
 
     getList: async (req, res) => {
