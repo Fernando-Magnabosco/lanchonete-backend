@@ -1,11 +1,41 @@
+const { v4: uuidv4 } = require("uuid");
+const jimp = require("jimp");
+
 const { validationResult, matchedData } = require("express-validator");
 
 const Category = require("../models/category.js");
 const Product = require("../models/product.js");
 const Ingredients = require("../models/ingredient.js");
 const ProductIngredients = require("../models/productIngredients.js");
+const Images = require("../models/images.js");
 
 const idRegex = /[0-9]+/;
+
+const addImage = async (buffer) => {
+    const newName = `${uuidv4()}.jpg`;
+    const tmpImg = await jimp.read(buffer);
+    tmpImg.cover(500, 500).quality(80).write(`./public/media/${newName}`);
+    return newName;
+};
+
+const isValidMimetype = (mimetype) => {
+    const mimetypes = ["image/jpeg", "image/jpg", "image/png"];
+
+    if (mimetypes.includes(mimetype)) return true;
+
+    return false;
+};
+
+const pushImg = async (img, product, isDefault = false) => {
+    let url = await addImage(img.data);
+    let imgObj = await Images.create({
+        url,
+        default: isDefault,
+        product: product.id_produto,
+    });
+
+    return;
+};
 
 module.exports = {
     // CREATE
@@ -57,6 +87,18 @@ module.exports = {
             });
         }
 
+        if (!req.files || !req.files.img) {
+            return res.json({ product });
+        }
+        if (req.files.img.length == undefined) {
+            if (isValidMimetype(req.files.img.mimetype))
+                await pushImg(req.files.img, product, true);
+        } else {
+            for (let i in req.files.img)
+                if (isValidMimetype(req.files.img[i].mimetype))
+                    await pushImg(req.files.img[i], product, i === 0);
+        }
+
         return res.json({
             product,
         });
@@ -85,8 +127,13 @@ module.exports = {
             });
         }
 
+        const images = await Images.findAll({
+            where: { product: product.id_produto },
+        });
+
         res.json({
             product,
+            images,
         });
     },
 
@@ -113,9 +160,13 @@ module.exports = {
             order: [["nm_produto", sort]],
         });
         total = products.length;
-        products = products.map((product) => {
-            return product.toJSON();
-        });
+
+        for (const product of products) {
+            const images = await Images.findAll({
+                where: { product: product.id_produto },
+            });
+            product.dataValues.images = images;
+        }
 
         res.json({
             total,
