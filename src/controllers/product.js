@@ -28,6 +28,8 @@ const isValidMimetype = (mimetype) => {
 
 const pushImg = async (img, product, isDefault = false) => {
     let url = await addImage(img.data);
+
+    console.log("URL   ", url);
     let imgObj = await Images.create({
         url,
         default: isDefault,
@@ -40,18 +42,11 @@ const pushImg = async (img, product, isDefault = false) => {
 module.exports = {
     // CREATE
     addProduct: async (req, res) => {
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            return res.json({ error: errors.mapped() });
-        }
-
-        const data = matchedData(req);
-
-        let { name, description, price, category } = data;
+        let { name, description, price, category } = req.body;
         let { ingredients } = req.body;
 
-        if (ingredients) ingredients = JSON.parse(ingredients);
+        if (!name || !description || !price || !category)
+            return res.json({ error: "Missing fields" });
 
         const categoryExists = await Category.findByPk(category);
 
@@ -72,19 +67,22 @@ module.exports = {
             flsituacao: 1,
         });
 
-        for (const ingredient of ingredients) {
-            const ingredientExists = await Ingredients.findByPk(ingredient);
+        if (ingredients) {
+            ingredients = JSON.parse(ingredients);
+            for (const ingredient of ingredients) {
+                const ingredientExists = await Ingredients.findByPk(ingredient);
 
-            if (!ingredientExists) {
-                return res.status(400).json({
-                    error: "Ingrediente não existe",
+                if (!ingredientExists) {
+                    return res.status(400).json({
+                        error: "Ingrediente não existe",
+                    });
+                }
+
+                await ProductIngredients.create({
+                    id_produto: product.id_produto,
+                    id_ingrediente: ingredientExists.id_ingrediente,
                 });
             }
-
-            await ProductIngredients.create({
-                id_produto: product.id_produto,
-                id_ingrediente: ingredientExists.id_ingrediente,
-            });
         }
 
         if (!req.files || !req.files.img) {

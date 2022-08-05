@@ -23,7 +23,7 @@ router.post("/user/signup", AuthValidator.signup, AuthController.signup);
 router.post(
     "/product/add",
     Auth.private,
-    ProductValidator.addProduct,
+    // ProductValidator.addProduct,
     ProductController.addProduct
 );
 
