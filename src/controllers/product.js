@@ -139,7 +139,7 @@ module.exports = {
 
         let filters = { flsituacao: 1 };
 
-        if (q) filters.nm_produto = { [Op.like]: `%${q}%` };
+        if (q) filters.nm_produto = { [Op.iLike]: `%${q}%` };
         if (cat) {
             const category = await Category.findOne({
                 where: { nm_categoria: cat },
@@ -164,7 +164,7 @@ module.exports = {
             });
             product.dataValues.images = images;
         }
-        console.log(products, q);
+        //console.log(products, q);
         res.json({
             total,
             products,
