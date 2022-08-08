@@ -19,5 +19,17 @@ module.exports = {
         return res.json({
             ingrediente,
         });
+    },
+
+    getList: async (req, res) => {
+        const total = 0;
+
+        const ingredientes = await Ingrediente.findAll({
+            order: [["nm_ingrediente", "asc"]],
+        });
+
+        res.json({
+            ingredientes,
+        });
     }
 };

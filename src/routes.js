@@ -68,7 +68,7 @@ router.post(
 //->CREATED
 router.post("/ingredient/add", Auth.private, IngredientController.addIngredient);
 //-> LIST
-rounte
+router.get("/ingredient/list", IngredientController.getList);
 
 
 module.exports = router;
