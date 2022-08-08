@@ -9,6 +9,7 @@ const ProductValidator = require("./validators/product.js");
 const AuthController = require("./controllers/auth.js");
 const ProductController = require("./controllers/product.js");
 const CategoryController = require("./controllers/category.js");
+const IngredientController = require("./controllers/ingredientes.js");
 
 router.get("/ping", (req, res) => {
     res.json({ pong: true });
@@ -62,5 +63,12 @@ router.post(
     Auth.private,
     CategoryController.toggleCategory
 );
+
+//INGREDIENT
+//->CREATED
+router.post("/ingredient/add", Auth.private, IngredientController.addIngredient);
+//-> LIST
+rounte
+
 
 module.exports = router;
