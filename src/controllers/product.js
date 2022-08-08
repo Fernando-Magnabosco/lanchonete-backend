@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require("uuid");
 const jimp = require("jimp");
 
 const { validationResult, matchedData } = require("express-validator");
-
+const { Op } = require("sequelize");
 const Category = require("../models/category.js");
 const Product = require("../models/product.js");
 const Ingredients = require("../models/ingredient.js");
@@ -139,7 +139,7 @@ module.exports = {
 
         let filters = { flsituacao: 1 };
 
-        if (q) filters.nm_produto = new RegExp(q, "i");
+        if (q) filters.nm_produto = { [Op.like]: `%${q}%` };
         if (cat) {
             const category = await Category.findOne({
                 where: { nm_categoria: cat },
@@ -147,6 +147,8 @@ module.exports = {
             if (category) filters.category = category._id.toString();
         }
 
+        total = await Product.findAll();
+        total = total.length;
         let products;
 
         products = await Product.findAll({
@@ -155,7 +157,6 @@ module.exports = {
             limit: parseInt(limit),
             order: [["nm_produto", sort]],
         });
-        total = products.length;
 
         for (const product of products) {
             const images = await Images.findAll({
@@ -163,7 +164,7 @@ module.exports = {
             });
             product.dataValues.images = images;
         }
-
+        console.log(products, q);
         res.json({
             total,
             products,
