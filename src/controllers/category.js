@@ -26,8 +26,7 @@ module.exports = {
         });
     },
 
-    // READ
-
+    // READ 
     getItems: async (req, res) => {
         let { id } = req.params;
 
@@ -69,7 +68,6 @@ module.exports = {
     },
 
     // UPDATE/DELETE
-
     toggleCategory: async (req, res) => {
         let { id } = req.body;
 
