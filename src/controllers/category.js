@@ -54,7 +54,6 @@ module.exports = {
         let { sort = "asc", offset = 0, limit = 8 } = req.query;
 
         const categories = await Category.findAll({
-            where: { flsituacao: true },
             offset: parseInt(offset),
             limit: parseInt(limit),
             order: [["nm_categoria", sort]],
