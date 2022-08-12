@@ -44,7 +44,7 @@ module.exports = {
     addProduct: async (req, res) => {
         let { name, description, price, category } = req.body;
         let { ingredients } = req.body;
-
+        console.log(req.body);
         if (!name || !description || !price || !category)
             return res.json({ error: "Missing fields" });
 
@@ -232,6 +232,42 @@ module.exports = {
             product.valor = price;
         }
         if (category) product.id_categoria = category;
+
+
+        if (req.files && req.files.img) {
+            const adI = await product.findById(id);
+
+            if (req.files.img.length == undefined) {
+                if (
+                    ["image/jpeg", "image/jpg", "image/png"].includes(
+                        req.files.img.mimetype
+                    )
+                ) {
+                    let url = await addImage(req.files.img.data);
+                    adI.images.push({
+                        url,
+                        default: false,
+                    });
+                }
+            } else {
+                for (let i = 0; i < req.files.img.length; i++) {
+                    if (
+                        ["image/jpeg", "image/jpg", "image/png"].includes(
+                            req.files.img[i].mimetype
+                        )
+                    ) {
+                        let url = await addImage(req.files.img[i].data);
+                        adI.images.push({
+                            url,
+                            default: false,
+                        });
+                    }
+                }
+            }
+
+            adI.images = [...adI.images];
+            await adI.save();
+        }
 
         await product.save();
 
