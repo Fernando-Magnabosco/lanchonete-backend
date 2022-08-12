@@ -26,7 +26,7 @@ module.exports = {
         });
     },
 
-    // READ 
+    // READ
     getItems: async (req, res) => {
         let { id } = req.params;
 
@@ -92,6 +92,38 @@ module.exports = {
 
         await category.update({
             flsituacao: !category.flsituacao,
+        });
+
+        res.json({
+            category,
+        });
+    },
+
+    updateCategory: async (req, res) => {
+        let { id } = req.params;
+        let { name } = req.body;
+
+        if (!id) {
+            return res.status(400).json({
+                error: "Categoria Inválida",
+            });
+        }
+
+        if (!id.match(idRegex)) {
+            return res.status(400).json({
+                error: "Categoria inválida",
+            });
+        }
+        const category = await Category.findByPk(id);
+
+        if (!category) {
+            return res.status(400).json({
+                error: "Categoria não existe",
+            });
+        }
+
+        await category.update({
+            nm_categoria: name,
         });
 
         res.json({
