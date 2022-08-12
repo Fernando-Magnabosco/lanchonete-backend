@@ -64,11 +64,23 @@ router.post(
     CategoryController.toggleCategory
 );
 
+router.put("/category/:id", Auth.private, CategoryController.updateCategory);
+
 //INGREDIENT
 //->CREATED
-router.post("/ingredient/add", Auth.private, IngredientController.addIngredient);
+router.post(
+    "/ingredient/add",
+    Auth.private,
+    IngredientController.addIngredient
+);
 //-> LIST
 router.get("/ingredient/list", IngredientController.getList);
 
+// UPDATE
+router.put(
+    "/ingredient/:id",
+    Auth.private,
+    IngredientController.updateIngredient
+);
 
 module.exports = router;
