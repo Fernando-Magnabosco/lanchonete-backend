@@ -283,44 +283,30 @@ module.exports = {
             });
         }
 
-        let { toRemove, toAdd } = req.body;
+        let { ingredients } = req.body;
 
-        if (toRemove) {
-            toRemove = JSON.parse(toRemove);
-            for (const ingredient of toRemove) {
-                const ingredientExists = await Ingredients.findByPk(ingredient);
-
-                if (!ingredientExists) {
-                    return res.status(400).json({
-                        error: "Ingrediente não existe",
-                    });
-                }
-
-                await ProductIngredients.destroy({
-                    where: {
-                        id_produto: id,
-                        id_ingrediente: ingredientExists.id_ingrediente,
-                    },
-                });
-            }
+        if (!ingredients) {
+            return res.status(400).json({
+                error: "Ingredientes Inválidos",
+            });
         }
 
-        if (toAdd) {
-            toAdd = JSON.parse(toAdd);
-            for (const ingredient of toAdd) {
-                const ingredientExists = await Ingredients.findByPk(ingredient);
+        const product = await Product.findByPk(id);
+        if (!product) {
+            return res.status(400).json({
+                error: "Produto não existe",
+            });
+        }
 
-                if (!ingredientExists) {
-                    return res.status(400).json({
-                        error: "Ingrediente não existe",
-                    });
-                }
+        const keys = await ProductIngredients.destroy({
+            where: { id_produto: id },
+        });
 
-                await ProductIngredients.create({
-                    id_produto: id,
-                    id_ingrediente: ingredientExists.id_ingrediente,
-                });
-            }
+        for (const ingredient of ingredients) {
+            ProductIngredients.create({
+                id_produto: id,
+                id_ingrediente: ingredient,
+            });
         }
 
         return res.json({
