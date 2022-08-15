@@ -68,6 +68,7 @@ module.exports = {
         const newUser = new User({
             name: data.name,
             email: data.email,
+            isAdmin: data.isAdmin,
             passwordHash,
             token,
         });

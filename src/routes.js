@@ -17,7 +17,7 @@ router.get("/ping", (req, res) => {
 
 // AUTH
 router.post("/user/signin", AuthValidator.signin, AuthController.signin);
-router.post("/user/signup", AuthValidator.signup, AuthController.signup);
+router.post("/user/signup", Auth.private, AuthValidator.signup, AuthController.signup);
 
 // PRODUCT:
 // CREATE
