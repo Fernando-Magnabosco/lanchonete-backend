@@ -34,7 +34,7 @@ router.get("/product/:id", ProductController.getProduct);
 router.get("/product/:id/ingredients", ProductController.getIngredients);
 
 // UPDATE / DELETE
-router.put(
+router.post(
     "/product/:id",
     Auth.private,
     ProductValidator.updateProduct,

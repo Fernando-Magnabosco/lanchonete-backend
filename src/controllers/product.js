@@ -200,18 +200,12 @@ module.exports = {
     // UPDATE/DELETE
     updateProduct: async (req, res) => {
         let { id } = req.params;
+        let { name, description, price, category } = req.body;
+        console.log(req.body);
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
             return res.json({ error: errors.mapped() });
-        }
-
-        const data = matchedData(req);
-
-        if (Object.keys(data).length === 0) {
-            return res.status(400).json({
-                error: "Nenhum dado foi enviado",
-            });
         }
 
         const product = await Product.findByPk(id);
@@ -222,20 +216,19 @@ module.exports = {
             });
         }
 
-        let { name, description, price, category } = data;
+        let updates = {};
 
-        if (name) product.nm_produto = name;
-        if (description) product.descricaoproduto = description;
+        if (name) updates.nm_produto = name;
+        if (description) updates.descricaoproduto = description;
         if (price) {
             price = price.replace(".", "").replace(",", ".").replace("R$ ", "");
             price = parseFloat(price);
-            product.valor = price;
+            updates.valor = price;
         }
-        if (category) product.id_categoria = category;
-
+        if (category) updates.id_categoria = category;
 
         if (req.files && req.files.img) {
-            const adI = await product.findById(id);
+            // const adI = await Ad.findByPk(id);
 
             if (req.files.img.length == undefined) {
                 if (
@@ -244,8 +237,10 @@ module.exports = {
                     )
                 ) {
                     let url = await addImage(req.files.img.data);
-                    adI.images.push({
+
+                    Images.create({
                         url,
+                        product: product.id_produto,
                         default: false,
                     });
                 }
@@ -257,23 +252,20 @@ module.exports = {
                         )
                     ) {
                         let url = await addImage(req.files.img[i].data);
-                        adI.images.push({
+
+                        Images.create({
                             url,
+                            product: product.id_produto,
                             default: false,
                         });
                     }
                 }
             }
-
-            adI.images = [...adI.images];
-            await adI.save();
         }
 
-        await product.save();
-
-        return res.json({
-            product,
-        });
+        console.log(updates);
+        await product.update(updates);
+        return res.json({ product });
     },
 
     updateIngredients: async (req, res) => {
