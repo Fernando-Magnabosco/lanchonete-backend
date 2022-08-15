@@ -34,5 +34,9 @@ module.exports = {
             },
             errorMessage: "A senha deve conter pelo menos 8 caracteres",
         },
+        isAdmin: {
+            isBoolean: true,
+            errorMessage: "O campo isAdmin deve ser true ou false",
+        },
     }),
 };
