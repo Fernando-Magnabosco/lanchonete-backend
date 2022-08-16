@@ -42,9 +42,9 @@ module.exports = {
             });
         }
 
-        let { nome } = req.body;
+        let { name } = req.body;
 
-        if (!nome) {
+        if (!name) {
             return res.status(404).json({
                 error: "Nome inválido",
             });
@@ -52,7 +52,7 @@ module.exports = {
 
         const formaPagamento = await FormasPagamento.update(
             {
-                nomeformapagamento: nome,
+                nomeformapagamento: name,
             },
             {
                 where: {
@@ -66,23 +66,36 @@ module.exports = {
         });
     },
 
-    removeFormaPagamento: async (req, res) => {
-        let { id } = req.params;
+    toggleFormaPagamento: async (req, res) => {
+        let { id } = req.body;
 
         if (!id) {
-            return res.status(404).json({
+            return res.status(400).json({
                 error: "Forma de pagamento inválida",
             });
         }
 
-        const formaPagamento = await FormasPagamento.destroy({
-            where: {
-                idformapagamento: id,
-            },
+        if (!id.match(idRegex)) {
+            return res.status(400).json({
+                error: "Forma de pagamento inválida",
+            });
+        }
+
+        const forma = await FormasPagamento.findByPk(id);
+
+        if (!forma) {
+            return res.status(400).json({
+                error: "Forma de pagamento não existe",
+            });
+        }
+
+        await forma.update({
+            flsituacao: !forma.flsituacao,
         });
 
-        return res.json({
-            formaPagamento,
+        res.json({
+            forma,
         });
     },
+
 };

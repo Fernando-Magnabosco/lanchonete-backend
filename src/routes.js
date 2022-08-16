@@ -122,11 +122,11 @@ router.put(
     FormasPagamentoController.updateFormaPagamento
 );
 
-// DELETE
 router.post(
     "/formaspagamento/toggle",
     Auth.private,
-    FormasPagamentoController.removeFormaPagamento
+    FormasPagamentoController.toggleFormaPagamento
 );
+
 
 module.exports = router;

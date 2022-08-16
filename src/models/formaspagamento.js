@@ -13,6 +13,10 @@ const modelSchema = db.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        flsituacao: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
     },
     {
         timestamps: false,
