@@ -77,4 +77,72 @@ module.exports = {
 
         res.json({ token });
     },
+
+    delete: async (req, res) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            res.json({ error: errors.mapped() });
+            return;
+        }
+        const data = matchedData(req);
+
+        const user = await User.findOne({
+            where: {
+                _id: data._id,
+            },
+        });
+
+        if (!user) {
+            res.json({ error: "Usuário não encontrado" });
+            return;
+        }
+
+        if (user.isAdmin) {
+            res.json({ error: "Não é possível excluir o administrador" });
+            return;
+        }
+
+        await user.destroy();
+
+        res.json({ message: "Usuário deletado" });
+    },
+
+    getList: async (req, res) => {
+        const users = await User.findAll({ where: { isAdmin: false } });
+        res.json(users);
+    },
+
+    update: async (req, res) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            res.json({ error: errors.mapped() });
+            return;
+        }
+        const data = matchedData(req);
+
+        const user = await User.findOne({
+            where: {
+                _id: data._id,
+            },
+        });
+
+        if (!user) {
+            res.json({ error: "Usuário não encontrado" });
+            return;
+        }
+
+        if (data.name) user.name = data.name;
+        if (data.isAdmin) user.isAdmin = data.isAdmin;
+        if (data.password)
+            user.passwordHash = await bcrypt.hash(data.password, 10);
+
+        await user.save();
+
+        res.json({ message: "Usuário atualizado" });
+    },
+
+    
+    
 };

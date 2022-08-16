@@ -10,6 +10,7 @@ const AuthController = require("./controllers/auth.js");
 const ProductController = require("./controllers/product.js");
 const CategoryController = require("./controllers/category.js");
 const IngredientController = require("./controllers/ingredientes.js");
+const FormasPagamentoController = require("./controllers/formaspagamento.js");
 
 router.get("/ping", (req, res) => {
     res.json({ pong: true });
@@ -17,7 +18,22 @@ router.get("/ping", (req, res) => {
 
 // AUTH
 router.post("/user/signin", AuthValidator.signin, AuthController.signin);
-router.post("/user/signup", Auth.private, AuthValidator.signup, AuthController.signup);
+
+// CREATE
+router.post(
+    "/user/signup",
+    Auth.private,
+    AuthValidator.signup,
+    AuthController.signup
+);
+
+// READ
+router.get("/user/list", Auth.private, AuthController.getList);
+// UPDATE
+router.put("/user/update", Auth.private, AuthController.update);
+
+// DELETE
+router.post("/user/delete", Auth.private, AuthController.delete);
 
 // PRODUCT:
 // CREATE
@@ -81,6 +97,31 @@ router.put(
     "/ingredient/:id",
     Auth.private,
     IngredientController.updateIngredient
+);
+
+// FORMAS DE PAGAMENTO
+// CREATE
+router.post(
+    "/formaspagamento/add",
+    Auth.private,
+    FormasPagamentoController.addFormaPagamento
+);
+
+// READ
+router.get("/formaspagamento/list", FormasPagamentoController.getList);
+
+// UPDATE
+router.put(
+    "/formaspagamento/:id",
+    Auth.private,
+    FormasPagamentoController.updateFormaPagamento
+);
+
+// DELETE
+router.post(
+    "/formaspagamento/toggle",
+    Auth.private,
+    FormasPagamentoController.removeFormaPagamento
 );
 
 module.exports = router;
