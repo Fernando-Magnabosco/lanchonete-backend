@@ -30,7 +30,12 @@ router.post(
 // READ
 router.get("/user/list", Auth.private, AuthController.getList);
 // UPDATE
-router.put("/user/update", Auth.private, AuthController.update);
+router.put(
+    "/user/:id",
+    Auth.private,
+    AuthValidator.update,
+    AuthController.update
+);
 
 // DELETE
 router.post("/user/delete", Auth.private, AuthController.delete);

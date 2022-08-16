@@ -79,17 +79,11 @@ module.exports = {
     },
 
     delete: async (req, res) => {
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            res.json({ error: errors.mapped() });
-            return;
-        }
-        const data = matchedData(req);
-
+        const { id } = req.body;
+        console.log(id);
         const user = await User.findOne({
             where: {
-                _id: data._id,
+                _id: id,
             },
         });
 
@@ -114,6 +108,8 @@ module.exports = {
     },
 
     update: async (req, res) => {
+        const { id } = req.params;
+
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
@@ -121,10 +117,10 @@ module.exports = {
             return;
         }
         const data = matchedData(req);
-
+        console.log(id, data);
         const user = await User.findOne({
             where: {
-                _id: data._id,
+                _id: id,
             },
         });
 
@@ -142,7 +138,4 @@ module.exports = {
 
         res.json({ message: "Usuário atualizado" });
     },
-
-    
-    
 };

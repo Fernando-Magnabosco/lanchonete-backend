@@ -43,18 +43,21 @@ module.exports = {
     update: checkSchema({
         name: {
             trim: true,
+            optional: true,
             isLength: {
                 options: { min: 2, max: 30 },
             },
             errorMessage: "Nome deve conter entre 2 e 30 caracteres",
         },
         password: {
+            optional: true,
             isLength: {
                 options: { min: 8 },
             },
             errorMessage: "A senha deve conter pelo menos 8 caracteres",
         },
         isAdmin: {
+            optional: true,
             isBoolean: true,
             errorMessage: "O campo isAdmin deve ser true ou false",
         },
