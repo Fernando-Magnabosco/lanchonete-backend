@@ -102,7 +102,7 @@ router.put(
 // FORMAS DE PAGAMENTO
 // CREATE
 router.post(
-    "/formaspagamento/add",
+    "/formaspagamentos/add",
     Auth.private,
     FormasPagamentoController.addFormaPagamento
 );

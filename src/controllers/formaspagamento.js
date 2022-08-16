@@ -3,16 +3,17 @@ const FormasPagamento = require("../models/formaspagamento.js");
 
 module.exports = {
     addFormaPagamento: async (req, res) => {
-        let { nome } = req.body;
+        let { name } = req.body;
+        console.log(name);
 
-        if (!nome) {
+        if (!name) {
             return res.status(404).json({
                 error: "Nome inválido",
             });
         }
 
         const formaPagamento = await FormasPagamento.create({
-            nm_forma_pagamento: nome,
+            nomeformapagamento: name,
         });
 
         return res.json({
@@ -24,7 +25,7 @@ module.exports = {
         const total = 0;
 
         const formasPagamento = await FormasPagamento.findAll({
-            order: [["nm_forma_pagamento", "asc"]],
+            order: [["nomeformapagamento", "asc"]],
         });
 
         res.json({
@@ -51,11 +52,11 @@ module.exports = {
 
         const formaPagamento = await FormasPagamento.update(
             {
-                nm_forma_pagamento: nome,
+                nomeformapagamento: nome,
             },
             {
                 where: {
-                    id_forma_pagamento: id,
+                    idformapagamento: id,
                 },
             }
         );
@@ -76,7 +77,7 @@ module.exports = {
 
         const formaPagamento = await FormasPagamento.destroy({
             where: {
-                id_forma_pagamento: id,
+                idformapagamento: id,
             },
         });
 
