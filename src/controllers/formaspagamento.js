@@ -1,6 +1,8 @@
 
 const FormasPagamento = require("../models/formaspagamento.js");
 
+const idRegex = /[0-9]+/;
+
 module.exports = {
     addFormaPagamento: async (req, res) => {
         let { name } = req.body;
@@ -14,6 +16,7 @@ module.exports = {
 
         const formaPagamento = await FormasPagamento.create({
             nomeformapagamento: name,
+            flsituacao: "true",
         });
 
         return res.json({
@@ -68,7 +71,7 @@ module.exports = {
 
     toggleFormaPagamento: async (req, res) => {
         let { id } = req.body;
-
+        console.log(id);
         if (!id) {
             return res.status(400).json({
                 error: "Forma de pagamento inválida",
