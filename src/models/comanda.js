@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../db");
-
+const User = require("../models/user");
 const modelSchema = db.define(
     "Comanda",
     {
@@ -13,8 +13,8 @@ const modelSchema = db.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "garcom",
-                key: "idgarcom",
+                model: "User",
+                key: "_id",
             },
         },
         data: {
@@ -36,5 +36,7 @@ const modelSchema = db.define(
         freezeTableName: true,
     }
 );
+
+modelSchema.belongsTo(User, { foreignKey: "id_garcom", as: "garcom" });
 
 module.exports = modelSchema;

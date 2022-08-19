@@ -11,6 +11,7 @@ const ProductController = require("./controllers/product.js");
 const CategoryController = require("./controllers/category.js");
 const IngredientController = require("./controllers/ingredientes.js");
 const FormasPagamentoController = require("./controllers/formaspagamento.js");
+const ComandaController = require("./controllers/comanda.js");
 
 router.get("/ping", (req, res) => {
     res.json({ pong: true });
@@ -128,5 +129,10 @@ router.post(
     FormasPagamentoController.toggleFormaPagamento
 );
 
+//COMANDA
+
+//READ
+
+router.get("/comanda/list", Auth.private, ComandaController.getList);
 
 module.exports = router;
