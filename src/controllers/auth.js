@@ -138,4 +138,21 @@ module.exports = {
 
         res.json({ message: "Usuário atualizado" });
     },
+
+    userLogged: async (req, res) => {
+        const { token } = req.query;
+
+        const user = await User.findOne({ where: { token: token } });
+
+        if (!user) {
+            res.json({ error: "Usuário não encontrado" });
+            return;
+        }
+
+        res.json({
+            id: user._id,
+            name: user.name,
+            email: user.email,
+        });
+    },
 };

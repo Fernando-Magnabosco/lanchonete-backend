@@ -30,6 +30,8 @@ router.post(
 
 // READ
 router.get("/user/list", Auth.private, AuthController.getList);
+router.get("/user/logged", Auth.private, AuthController.userLogged);
+
 // UPDATE
 router.put(
     "/user/:id",
@@ -134,5 +136,6 @@ router.post(
 //READ
 
 router.get("/comanda/list", Auth.private, ComandaController.getList);
+router.post("/comanda/item/cancel", Auth.private, ComandaController.cancelItem);
 
 module.exports = router;
