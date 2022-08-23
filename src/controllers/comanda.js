@@ -41,6 +41,32 @@ module.exports = {
         });
     },
 
+    addItem: async (req, res) => {
+        const { id_comanda, id_produto } = req.body;
+
+        const produto = await Product.findOne({
+            where: { id_produto },
+        });
+        if (!produto) {
+            return res.status(400).json({ error: "Produto não encontrado" });
+        }
+
+        const comanda = await Comanda.findOne({
+            where: { id_comanda },
+        });
+        if (!comanda) {
+            return res.status(400).json({ error: "Comanda não encontrada" });
+        }
+        const produtoComanda = await ProdutosComanda.create({
+            id_comanda,
+            id_produto,
+            vlvenda: produto.valor,
+            dataprodutoscomanda: new Date(),
+            pedidocancelado: false,
+        });
+        return res.json(produto);
+    },
+
     cancelItem: async (req, res) => {
         const { produto, comanda, reason, garcom } = req.body;
         const produtosComanda = await ProdutosComanda.findOne({
@@ -52,7 +78,7 @@ module.exports = {
             });
         }
         produtosComanda.pedidocancelado = true;
-        produtosComanda.motivo = reason;
+        produtosComanda.motivocancelamento = reason;
         produtosComanda.garcomalteracao = garcom.id;
         await produtosComanda.save();
 

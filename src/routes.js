@@ -136,6 +136,11 @@ router.post(
 //READ
 
 router.get("/comanda/list", Auth.private, ComandaController.getList);
+
+// CREATE
+router.post("/comanda/item/add", Auth.private, ComandaController.addItem);
+
+//UPDATE
 router.post("/comanda/item/cancel", Auth.private, ComandaController.cancelItem);
 
 module.exports = router;
