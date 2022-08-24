@@ -2,6 +2,7 @@ const Comanda = require("../models/comanda.js");
 const User = require("../models/user.js");
 const ProdutosComanda = require("../models/produtosComanda.js");
 const Product = require("../models/product.js");
+const PagamentosComanda = require("../models/pagamentosComanda.js");
 
 module.exports = {
     getList: async (req, res) => {
@@ -71,6 +72,41 @@ module.exports = {
             produtosComanda.push(produtoComanda);
         }
         return res.json(produtosComanda);
+    },
+
+    payment: async (req, res) => {
+        const { id_comanda, paidWith, id_garcom } = req.body;
+        if (!id_comanda)
+            return res.status(400).json({ error: "Comanda não informada" });
+        if (!paidWith)
+            return res
+                .status(400)
+                .json({ error: "Forma de pagamento não informada" });
+
+        const comanda = await Comanda.findOne({
+            where: { id_comanda: id_comanda },
+        });
+
+        if (!comanda)
+            return res.status(400).json({ error: "Comanda não encontrada" });
+        if (comanda.situacao !== 1)
+            return res.status(400).json({ error: "Comanda já paga" });
+
+        for (const paymentMethod in paidWith) {
+            if (paymentMethod === "desconto") {
+                comanda.desconto = paidWith[paymentMethod];
+            } else {
+                const payment = await PagamentosComanda.create({
+                    idcomanda: id_comanda,
+                    idformaPagamento: paymentMethod,
+                    vlPagamento: paidWith[paymentMethod],
+                });
+            }
+        }
+        comanda.situacao = 0;
+        await comanda.save();
+
+        return res.json(comanda);
     },
 
     addItem: async (req, res) => {

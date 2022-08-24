@@ -110,23 +110,23 @@ router.put(
 // FORMAS DE PAGAMENTO
 // CREATE
 router.post(
-    "/formaspagamentos/add",
+    "/paymentmethod/add",
     Auth.private,
     FormasPagamentoController.addFormaPagamento
 );
 
 // READ
-router.get("/formaspagamento/list", FormasPagamentoController.getList);
+router.get("/paymentmethod/list", FormasPagamentoController.getList);
 
 // UPDATE
 router.put(
-    "/formaspagamento/:id",
+    "/paymentmethod/:id",
     Auth.private,
     FormasPagamentoController.updateFormaPagamento
 );
 
 router.post(
-    "/formaspagamento/toggle",
+    "/paymentmethod/toggle",
     Auth.private,
     FormasPagamentoController.toggleFormaPagamento
 );
@@ -143,5 +143,6 @@ router.post("/comanda/add", Auth.private, ComandaController.addComanda);
 
 //UPDATE
 router.post("/comanda/item/cancel", Auth.private, ComandaController.cancelItem);
+router.post("/comanda/payment", Auth.private, ComandaController.payment);
 
 module.exports = router;

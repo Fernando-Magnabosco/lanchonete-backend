@@ -1,4 +1,3 @@
-
 const FormasPagamento = require("../models/formaspagamento.js");
 
 const idRegex = /[0-9]+/;
@@ -26,10 +25,7 @@ module.exports = {
 
     getList: async (req, res) => {
         const total = 0;
-
-        const formasPagamento = await FormasPagamento.findAll({
-            order: [["nomeformapagamento", "asc"]],
-        });
+        const formasPagamento = await FormasPagamento.findAll();
 
         res.json({
             formasPagamento,
@@ -100,5 +96,4 @@ module.exports = {
             forma,
         });
     },
-
 };
