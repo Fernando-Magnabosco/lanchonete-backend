@@ -139,6 +139,7 @@ router.get("/comanda/list", Auth.private, ComandaController.getList);
 
 // CREATE
 router.post("/comanda/item/add", Auth.private, ComandaController.addItem);
+router.post("/comanda/add", Auth.private, ComandaController.addComanda);
 
 //UPDATE
 router.post("/comanda/item/cancel", Auth.private, ComandaController.cancelItem);

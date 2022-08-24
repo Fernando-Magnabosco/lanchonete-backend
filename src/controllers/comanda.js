@@ -41,6 +41,38 @@ module.exports = {
         });
     },
 
+    addComanda: async (req, res) => {
+        const { products, id_garcom } = req.body;
+
+        if (!id_garcom)
+            return res.status(400).json({ error: "Garçom não informado" });
+
+        const comanda = await Comanda.create({
+            id_garcom: id_garcom.id,
+            data: new Date(),
+            situacao: 1,
+        });
+
+        console.log(products);
+        if (!products) return res.json(comanda);
+
+        const produtosComanda = [];
+        for (const product of products) {
+            const produto = await Product.findOne({
+                where: { id_produto: product },
+            });
+            const produtoComanda = await ProdutosComanda.create({
+                id_comanda: comanda.id_comanda,
+                id_produto: product,
+                vlvenda: produto.valor,
+                dataprodutoscomanda: new Date(),
+                pedidocancelado: false,
+            });
+            produtosComanda.push(produtoComanda);
+        }
+        return res.json(produtosComanda);
+    },
+
     addItem: async (req, res) => {
         const { id_comanda, id_produto } = req.body;
 
