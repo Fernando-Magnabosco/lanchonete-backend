@@ -14,8 +14,16 @@ const modelSchema = db.define(
             allowNull: false,
             references: {
                 model: "garcom",
-                key: "idgarcom",
+                key: "id_garcom",
             },
+        },
+        valor_final: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        mesa: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
         data: {
             type: DataTypes.DATE,

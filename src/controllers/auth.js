@@ -12,6 +12,7 @@ module.exports = {
             res.json({ error: errors.mapped() });
             return;
         }
+
         const data = matchedData(req);
 
         const user = await User.findOne({ where: { email: data.email } });
@@ -32,6 +33,7 @@ module.exports = {
         const token = await bcrypt.hash(payLoad, 10);
 
         user.token = token;
+        
         await user.save();
 
         res.json({
@@ -63,6 +65,7 @@ module.exports = {
         const passwordHash = await bcrypt.hash(data.password, 10);
 
         const payLoad = (Date.now() + Math.random()).toString();
+        
         const token = await bcrypt.hash(payLoad, 10);
 
         const newUser = new User({
@@ -80,7 +83,7 @@ module.exports = {
 
     delete: async (req, res) => {
         const { id } = req.body;
-        console.log(id);
+        
         const user = await User.findOne({
             where: {
                 _id: id,

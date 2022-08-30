@@ -50,15 +50,12 @@ module.exports = {
     },
 
     getList: async (req, res) => {
-        let total = 0;
-        let { sort = "asc", offset = 0, limit = 8 } = req.query;
+        let { sort = "asc", offset = 0} = req.query;
 
         const categories = await Category.findAll({
             offset: parseInt(offset),
-            limit: parseInt(limit),
             order: [["nm_categoria", sort]],
         });
-        total = categories.length;
 
         res.json({
             total,

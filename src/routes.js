@@ -11,6 +11,7 @@ const ProductController = require("./controllers/product.js");
 const CategoryController = require("./controllers/category.js");
 const IngredientController = require("./controllers/ingredientes.js");
 const FormasPagamentoController = require("./controllers/formaspagamento.js");
+const Comanda = require("./controllers/comanda.js");
 
 router.get("/ping", (req, res) => {
     res.json({ pong: true });
@@ -40,7 +41,7 @@ router.put(
 // DELETE
 router.post("/user/delete", Auth.private, AuthController.delete);
 
-// PRODUCT:
+// PRODUTO:
 // CREATE
 router.post(
     "/product/add",
@@ -128,5 +129,12 @@ router.post(
     FormasPagamentoController.toggleFormaPagamento
 );
 
+//COMANDA
+//CREATE
+router.post(
+    "/comanda/add",
+    Auth.private,
+    Comanda.addComanda
+);
 
 module.exports = router;

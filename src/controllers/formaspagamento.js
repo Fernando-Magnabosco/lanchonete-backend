@@ -71,7 +71,7 @@ module.exports = {
 
     toggleFormaPagamento: async (req, res) => {
         let { id } = req.body;
-        console.log(id);
+        
         if (!id) {
             return res.status(400).json({
                 error: "Forma de pagamento inválida",

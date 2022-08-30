@@ -135,7 +135,7 @@ module.exports = {
 
     getList: async (req, res) => {
         let total = 0;
-        let { sort = "asc", offset = 0, limit = 8, q, cat } = req.query;
+        let { sort = "asc", offset = 0,  q, cat } = req.query;
 
         let filters = { flsituacao: 1 };
 
@@ -154,7 +154,7 @@ module.exports = {
         products = await Product.findAll({
             where: filters,
             offset: parseInt(offset),
-            limit: parseInt(limit),
+            // limit: parseInt(limit)  ? parseInt(limit): "",
             order: [["nm_produto", sort]],
         });
 
